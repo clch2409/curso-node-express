@@ -1,0 +1,24 @@
+{
+  "name": "curso-node-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "inspect": "nodemon --inspect index.js",
+    "start": "node index.js",
+    "lint": "eslint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "express": "^4.18.3"
+  }
+}
