@@ -1,38 +1,113 @@
 const express = require('express');
-const {createProducts} = require('../utils')
 const productsRouter = express.Router();
 
-let products = [];
+const ProductsService = require('./../services/products.service')
 
-productsRouter.get('', (req, res) => {
-  const {size} = req.query;
-  const limit = size || 10;
-  products = products.length && products.length === limit ? products : createProducts(limit);
+productsRouter.get('', findAll);
+
+productsRouter.post('', createProduct)
+
+productsRouter.get('/:id', findById)
+
+productsRouter.put('/:id', updateProduct)
+
+productsRouter.patch('/:id', updateProduct)
+
+productsRouter.delete('/:id', deleteProduct)
+
+async function findAll (req, res) {
+  const products = await ProductsService.findAll();
   res.json(products);
-});
+}
 
-productsRouter.post('', (req, res) =>{
+async function createProduct(req, res){
   const body = req.body;
-  res.json({
-    message: 'created',
-    data: body
-  });
-})
+  await ProductsService.createProduct(body)
 
-productsRouter.get('/:id', (req, res) =>{//! Los parametros se especifican en la ruta y los podemos obtener en los parámetros
-  const { id } = req.params;
-  const identificador = parseInt(id);
-  const encontrado = products.find(product => product.id === identificador)
-  if (products.length === 0){
-    res.send('No hay productos disponibles')
+  const products = await ProductsService.findAll();
+
+  res.status(201).json({
+    message: 'created',
+    data: body,
+    products: products
+  });
+}
+
+async function findById(req, res){
+  try{
+    const products = await ProductsService.findAll()
+    const { id } = req.params;
+    const encontrado = await ProductsService.findById(id)
+    if (!products.length){
+      throw new Error('No contamos con productos disponibles');
+    }
+    else if (!encontrado){
+      throw new Error('El producto no existe');
+    }
+    else{
+      res.status(302).json(encontrado)
+    }
   }
-  else if (!encontrado){
-    res.send('Este producto no existe')
+  catch(error){
+    res.status(404).json({
+      message: error.message
+    });
   }
-  else{
-    res.json(encontrado)
+}
+
+async function updateProduct(req, res){
+  try{
+    let products = await ProductsService.findAll();
+    const {id} = req.params;
+    const sentProduct = req.body;
+
+    const productUpdated = await ProductsService.updateProduct(id, sentProduct);
+
+    if (productUpdated){
+      products = ProductsService.findAll()
+      res.json({
+        message: 'Producto Actualizado',
+        data: productUpdated,
+        products: products
+      })
+    }
+    else{
+      throw new Error('Producto no encontrado');
+    }
   }
-})
+  catch(e){
+    res.status(404).json({
+      message: e.message
+    })
+  }
+}
+
+async function deleteProduct(req, res){
+  let products = await ProductsService.findAll();
+  const {id} = req.params;
+
+  const deletedProduct = await ProductsService.deleteProduct(id);
+
+  try{
+    if (deletedProduct){
+      products = await ProductsService.findAll()
+      res.json({
+        message: 'Producto Eliminado',
+        data: deletedProduct,
+        products: products
+      })
+    }
+    else{
+      throw new Error('Producto no encontrado');
+    }
+  }
+  catch(e){
+    res.status(404).json({
+      message: e.message
+    })
+  }
+}
+
 
 module.exports = productsRouter;
 
