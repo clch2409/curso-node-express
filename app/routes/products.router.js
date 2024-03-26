@@ -1,7 +1,8 @@
 const express = require('express');
 const productsRouter = express.Router();
 
-const ProductsService = require('./../services/products.service')
+const ProductsService = require('./../services/products.service');
+const boom = require('@hapi/boom');
 
 productsRouter.get('', findAll);
 
@@ -33,29 +34,27 @@ async function createProduct(req, res){
   });
 }
 
-async function findById(req, res){
+async function findById(req, res, next){
   try{
     const products = await ProductsService.findAll()
     const { id } = req.params;
     const encontrado = await ProductsService.findById(id)
     if (!products.length){
-      throw new Error('No contamos con productos disponibles');
+      throw new boom.notFound('No contamos con productos disponibles');
     }
     else if (!encontrado){
-      throw new Error('El producto no existe');
+      throw new boom.notFound('El producto no existe');
     }
     else{
       res.status(302).json(encontrado)
     }
   }
   catch(error){
-    res.status(404).json({
-      message: error.message
-    });
+    next(error);
   }
 }
 
-async function updateProduct(req, res){
+async function updateProduct(req, res, next){
   try{
     let products = await ProductsService.findAll();
     const {id} = req.params;
@@ -72,17 +71,15 @@ async function updateProduct(req, res){
       })
     }
     else{
-      throw new Error('Producto no encontrado');
+      throw new boom.notFound('El producto no existe');
     }
   }
   catch(e){
-    res.status(404).json({
-      message: e.message
-    })
+    next(e);
   }
 }
 
-async function deleteProduct(req, res){
+async function deleteProduct(req, res, next){
   let products = await ProductsService.findAll();
   const {id} = req.params;
 
@@ -102,9 +99,7 @@ async function deleteProduct(req, res){
     }
   }
   catch(e){
-    res.status(404).json({
-      message: e.message
-    })
+    next(e);
   }
 }
 
