@@ -21,11 +21,12 @@ class ProductsService{
 
     for (let i = 0; i < amountProducts; i++){
       this.products.push({
-        id: i+1,
+        id: faker.faker.string.uuid(),
         name: faker.fakerES.commerce.product(),
         price: parseFloat(faker.fakerES.commerce.price({min: 10, max: 1000})),
         stock: faker.simpleFaker.number.int({min: 1,  max: 50}),
         image: faker.fakerES.image.urlPicsumPhotos(),
+        isVisible: faker.faker.datatype.boolean(),
       });
     }
   }
@@ -43,10 +44,10 @@ class ProductsService{
   }
 
   createProduct(product){
-    const newIndex = this.products.length;
     const newProduct = {
-      id: newIndex + 1,
-      ...product
+      id: faker.faker.string.uuid(),
+      ...product,
+      isVisible: true
     }
     this.products.push(newProduct)
     return newProduct

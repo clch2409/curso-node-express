@@ -3,18 +3,30 @@ const productsRouter = express.Router();
 
 const ProductsService = require('./../services/products.service');
 const boom = require('@hapi/boom');
+const validatorHandler = require('./../middlewares/validator.handler')
+const { createProductSchema, updateProductSchema, getProductSchema } = require('./../schema/product.schema')
 
 productsRouter.get('', findAll);
 
-productsRouter.post('', createProduct)
+productsRouter.post('',
+  validatorHandler(createProductSchema, 'body'),
+  createProduct)
 
-productsRouter.get('/:id', findById)
+productsRouter.get('/:id',
+  validatorHandler(getProductSchema, 'params'),
+  findById)
 
-productsRouter.put('/:id', updateProduct)
+productsRouter.put('/:id',
+  validatorHandler(updateProductSchema, 'body'),
+  updateProduct)
 
-productsRouter.patch('/:id', updateProduct)
+productsRouter.patch('/:id',
+  validatorHandler(updateProductSchema, 'body'),
+  updateProduct)
 
-productsRouter.delete('/:id', deleteProduct)
+productsRouter.delete('/:id',
+  validatorHandler(getProductSchema, 'params'),
+  deleteProduct)
 
 async function findAll (req, res) {
   const products = await ProductsService.findAll();
@@ -39,11 +51,15 @@ async function findById(req, res, next){
     const products = await ProductsService.findAll()
     const { id } = req.params;
     const encontrado = await ProductsService.findById(id)
+
     if (!products.length){
       throw new boom.notFound('No contamos con productos disponibles');
     }
     else if (!encontrado){
       throw new boom.notFound('El producto no existe');
+    }
+    else if (!encontrado.isVisible){
+      throw new boom.unauthorized('No tiene permitido ver este producto');
     }
     else{
       res.status(302).json(encontrado)
@@ -63,7 +79,7 @@ async function updateProduct(req, res, next){
     const productUpdated = await ProductsService.updateProduct(id, sentProduct);
 
     if (productUpdated){
-      products = ProductsService.findAll()
+      products = await ProductsService.findAll()
       res.json({
         message: 'Producto Actualizado',
         data: productUpdated,
@@ -95,7 +111,7 @@ async function deleteProduct(req, res, next){
       })
     }
     else{
-      throw new Error('Producto no encontrado');
+      throw new boom.notFound('Producto no encontrado');
     }
   }
   catch(e){
