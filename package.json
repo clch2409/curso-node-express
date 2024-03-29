@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "inspect": "nodemon --inspect index.js",
-    "start": "node index.js",
+    "dev": "nodemon api/index.js",
+    "inspect": "nodemon --inspect api/index.js",
+    "start": "node api/index.js",
     "lint": "eslint"
   },
   "keywords": [],

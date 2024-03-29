@@ -1,10 +1,10 @@
 const express = require('express');
 const productsRouter = express.Router();
 
-const ProductsService = require('./../services/products.service');
+const ProductsService = require('../services/products.service');
 const boom = require('@hapi/boom');
-const validatorHandler = require('./../middlewares/validator.handler')
-const { createProductSchema, updateProductSchema, getProductSchema } = require('./../schema/product.schema')
+const validatorHandler = require('../middlewares/validator.handler')
+const { createProductSchema, updateProductSchema, getProductSchema } = require('../schema/product.schema')
 
 productsRouter.get('', findAll);
 

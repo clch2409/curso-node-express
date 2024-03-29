@@ -1,15 +1,15 @@
 const express = require('express');
-const routerApi = require('./app/routes');
-const { logErrors, errorHandler, isBoomHandler } = require('./app/middlewares/error.handler');
+const routerApi = require('./routes');
+const { logErrors, errorHandler, isBoomHandler } = require('./middlewares/error.handler');
 const cors = require('cors')
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const whileList = ['http://localhost:5500'];
 const options = {
   origin: (origin, callback) =>{
-    if (whileList.includes(origin)){
+    if (whileList.includes(origin) || !origin){
       callback(null, true);
     }
     else{
@@ -21,11 +21,11 @@ const options = {
 app.use(cors(options))
 app.use(express.json())
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Hola, mi server en express');
 });
 
-app.get('/nueva', (req, res) => {
+app.get('/api/nueva', (req, res) => {
   res.send('Soy un nuevo endpoint');
 });
 
