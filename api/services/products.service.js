@@ -32,11 +32,7 @@ class ProductsService{
   }
 
   findAll(){
-    return new Promise((resolve, reject)=>{
-      setTimeout(()=>{
-        resolve(this.products)
-      }, 5000)
-    })
+    return this.products
   }
 
   findById(id){
