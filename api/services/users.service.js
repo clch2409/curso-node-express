@@ -1,5 +1,5 @@
 const faker = require('@faker-js/faker')
-const regexPasswordRule = RegExp(/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/)
+const regexPasswordRule = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/
 
 class UsersService{
 
@@ -17,7 +17,8 @@ class UsersService{
         name: faker.faker.internet.userName(),
         email: faker.faker.internet.email(),
         password: faker.faker.internet.password({
-          pattern: regexPasswordRule,
+          length: 15,
+          // pattern: regexPasswordRule,
         }),
         role: faker.faker.number.int({
           min: 0,

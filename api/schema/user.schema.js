@@ -6,7 +6,7 @@ const id = joi.string().uuid();
 const name = joi.string().min(5).max(20);
 const email = joi.string().email();
 const password = joi.string().regex(regexPasswordRule);
-const role = joi.number().min(0).max(3);
+const role = joi.number().integer().min(0).max(3);
 const isActive = joi.boolean();
 
 const createUserSchema = joi.object({
