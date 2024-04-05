@@ -49,7 +49,7 @@ async function createUser(req, res, next){
     const body = req.body;
 
     const newUser = await usersService.createUser(body);
-    const users = await usersService.findAll()
+    const users = await usersService.findAll();
 
     res.status(201).json({
       newUser,
@@ -67,7 +67,7 @@ async function getUserById(req, res, next){
 
     const foundUser = await usersService.getUserById(id);
     if(!foundUser){
-      new boom.badRequest('El id del usuario no existe')
+      new boom.badRequest('El id del usuario no existe');
     }
 
     res.status(302).json({
@@ -86,6 +86,7 @@ async function updateUser(req, res, next){
 
     const foundUser = await usersService.updateUser(id, body);
     const users = await usersService.findAll();
+
     if(!foundUser){
       new boom.badRequest('El id del usuario no existe')
     }
@@ -105,7 +106,7 @@ async function deleteUser(req, res, next){
     const { id } = req.params;
 
     const foundUser = await usersService.deleteUser(id);
-    const users = await usersService.findAll();
+    const users = await usersService.showActiveUsers();
     if(!foundUser){
       new boom.badRequest('El id del usuario no existe')
     }

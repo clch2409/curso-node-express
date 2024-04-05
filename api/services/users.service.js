@@ -17,13 +17,15 @@ class UsersService{
         name: faker.faker.internet.userName(),
         email: faker.faker.internet.email(),
         password: faker.faker.internet.password({
-          length: 15,
-          // pattern: regexPasswordRule,
+          length: 17,
+          memorable: true,
+          pattern: regexPasswordRule,
         }),
         role: faker.faker.number.int({
           min: 0,
           max: 3,
-        })
+        }),
+        isActive: faker.faker.datatype.boolean(),
       }
 
       this.users.push(newUser);
@@ -32,6 +34,10 @@ class UsersService{
 
   findAll(){
     return this.users;
+  }
+
+  showActiveUsers(){
+    return this.users.filter(user => user.isActive !== false)
   }
 
   getUserById(id){
