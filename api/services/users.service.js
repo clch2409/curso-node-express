@@ -36,9 +36,9 @@ class UsersService{
     return this.users;
   }
 
-  // showActiveUsers(){
-  //   return this.users.filter(user => user.isActive !== false)
-  // }
+  showActiveUsers(){
+    return this.users.filter(user => user.isActive !== false)
+  }
 
   getUserById(id){
     return this.users.find(usuario => usuario.id == id)

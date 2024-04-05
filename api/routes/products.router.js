@@ -20,9 +20,9 @@ productsRouter.put('/:id',
   validatorHandler(updateProductSchema, 'body'),
   updateProduct)
 
-productsRouter.patch('/:id',
-  validatorHandler(updateProductSchema, 'body'),
-  updateProduct)
+// productsRouter.patch('/:id',
+//   validatorHandler(updateProductSchema, 'body'),
+//   updateProduct)
 
 productsRouter.delete('/:id',
   validatorHandler(getProductSchema, 'params'),

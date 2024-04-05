@@ -19,9 +19,9 @@ categoriesRouter.put('/:id',
   validatorHandler(updateCategorySchema, 'body'),
   updateCategory);
 
-categoriesRouter.patch('/:id',
-  validatorHandler(updateCategorySchema, 'body'),
-  updateCategory);
+// categoriesRouter.patch('/:id',
+//   validatorHandler(updateCategorySchema, 'body'),
+//   updateCategory);
 
 categoriesRouter.delete('/:id',
   validatorHandler(getCategorySchema, 'params'),

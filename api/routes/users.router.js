@@ -20,9 +20,9 @@ userRouter.put('/:id',
   validatorHandler(updateUserSchema, 'body'),
   updateUser);
 
-userRouter.patch('/:id',
-  validatorHandler(updateUserSchema, 'body'),
-  updateUser);
+// userRouter.patch('/:id',
+//   validatorHandler(updateUserSchema, 'body'),
+//   updateUser);
 
 userRouter.delete('/:id',
   validatorHandler(getUserSchema, 'params'),
