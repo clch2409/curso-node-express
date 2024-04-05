@@ -106,7 +106,7 @@ async function deleteUser(req, res, next){
     const { id } = req.params;
 
     const foundUser = await usersService.deleteUser(id);
-    const users = await usersService.showActiveUsers();
+    const users = await usersService.findAll();
     if(!foundUser){
       new boom.badRequest('El id del usuario no existe')
     }
