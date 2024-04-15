@@ -1,4 +1,5 @@
 const faker = require('@faker-js/faker');
+const pool = require('../libs/postgress.pool');
 
 
 class ProductsService{
@@ -8,6 +9,10 @@ class ProductsService{
   constructor(){
     this.products = [];
     this.generate();
+    this.pool = pool;
+    pool.on('error', (err) => {
+      console.log(err)
+    })
   }
 
   getInstance(){
@@ -31,15 +36,17 @@ class ProductsService{
     }
   }
 
-  findAll(){
-    return this.products
+  async findAll(){
+    const query = 'SELECT * FROM tasks';
+    const {rows} = await this.pool.query(query);
+    return rows
   }
 
-  findById(id){
+  async findById(id){
     return this.products.find(producto => producto.id == id);
   }
 
-  createProduct(product){
+  async createProduct(product){
     const newProduct = {
       id: faker.faker.string.uuid(),
       ...product,
@@ -49,7 +56,7 @@ class ProductsService{
     return newProduct
   }
 
-  updateProduct(id, productSent){
+  async updateProduct(id, productSent){
     const productFound = this.products.find(producto => producto.id == id);
 
     if (productFound){
@@ -71,7 +78,7 @@ class ProductsService{
     }
   }
 
-  deleteProduct(id){
+  async deleteProduct(id){
     const productFound = this.products.find(producto => producto.id == id);
     if (productFound){
       this.products = this.products.filter(producto => producto.id != productFound.id)

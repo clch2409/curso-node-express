@@ -32,8 +32,10 @@ class UsersService{
     }
   }
 
-  findAll(){
-    return this.users;
+  async findAll(){
+    const cliente = await getConnection();
+    const respuesta = await cliente.query('SELECT * FROM tasks;')
+    return respuesta.rows;
   }
 
   showActiveUsers(){

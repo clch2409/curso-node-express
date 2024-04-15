@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: tiendita
+      POSTGRES_USER: carapoia
+      POSTGRES_PASSWORD: L@Trinid@d2006
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: cesarlch2409@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - 5050:80
