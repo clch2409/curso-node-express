@@ -1,6 +1,10 @@
 const faker = require('@faker-js/faker')
 const regexPasswordRule = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/
 
+const  { models } = require('./../libs/sequelize');
+const boom = require('@hapi/boom');
+const { queryErrorHandler } = require('../middlewares/error.handler');
+
 class UsersService{
 
   constructor(){
@@ -33,65 +37,72 @@ class UsersService{
   }
 
   async findAll(){
-    const cliente = await getConnection();
-    const respuesta = await cliente.query('SELECT * FROM tasks;')
-    return respuesta.rows;
+    const response = models.User.findAll();
+    return response
   }
 
-  showActiveUsers(){
+  async showActiveUsers(){
     return this.users.filter(user => user.isActive !== false)
   }
 
-  getUserById(id){
-    return this.users.find(usuario => usuario.id == id)
+  async getUserById(id){
+    const foundUser = await models.User.findByPk(id);
+
+    if(!foundUser){
+      throw new boom.notFound('El usuario no existe');
+    }
+
+    return  foundUser;
   }
 
-  createUser(body){
-    const newId = faker.faker.string.uuid();
-    const newUser = {
-      id: newId,
-      ...body,
-      isActive: true
-    }
-    this.users.push(newUser);
+  async createUser(body){
+    const newUser = await models.User.create(body)
 
     return newUser;
   }
 
-  updateUser(id, body){
-    const userFound = this.users.find(usuario => usuario.id == id);
+  async updateUser(id, body){
+    // const userFound = this.users.find(usuario => usuario.id == id);
 
-    if (userFound){
-      this.users = this.users.map(usuario => {
-        if (usuario.id == id){
-          return {
-            ...usuario,
-            ...body
-          };
-        }
-        return usuario;
-      })
-    }
+    // if (userFound){
+    //   this.users = this.users.map(usuario => {
+    //     if (usuario.id == id){
+    //       return {
+    //         ...usuario,
+    //         ...body
+    //       };
+    //     }
+    //     return usuario;
+    //   })
+    // }
 
-    return userFound;
+    const foundUser = await this.getUserById(id);
+
+    const updatedUser = await foundUser.update(body)
+
+    return updatedUser;
   }
 
-  deleteUser(id){
-    const userFound = this.users.find(usuario => usuario.id == id);
+  async deleteUser(id){
+    // const userFound = this.users.find(usuario => usuario.id == id);
 
-    if (userFound){
-      this.users = this.users.map(usuario => {
-        if (usuario.id == id){
-          return {
-            ...usuario,
-            isActive: false
-          };
-        }
-        return usuario;
-      })
-    }
+    // if (userFound){
+    //   this.users = this.users.map(usuario => {
+    //     if (usuario.id == id){
+    //       return {
+    //         ...usuario,
+    //         isActive: false
+    //       };
+    //     }
+    //     return usuario;
+    //   })
+    // }
 
-    return userFound;
+    const foundUser = await this.getUserById(id);
+
+    foundUser.destroy()
+
+    return foundUser;
   }
 
 }

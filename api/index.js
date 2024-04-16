@@ -1,6 +1,6 @@
 const express = require('express');
 const routerApi = require('./routes');
-const { logErrors, errorHandler, isBoomHandler } = require('./middlewares/error.handler');
+const { logErrors, errorHandler, isBoomHandler, queryErrorHandler } = require('./middlewares/error.handler');
 const cors = require('cors')
 
 const app = express();
@@ -30,6 +30,7 @@ app.get('/api/nueva', (req, res) => {
 });
 
 
+app.use(queryErrorHandler);
 app.use(isBoomHandler);
 app.use(logErrors);
 app.use(errorHandler);

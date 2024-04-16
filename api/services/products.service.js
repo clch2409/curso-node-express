@@ -1,5 +1,6 @@
 const faker = require('@faker-js/faker');
-const pool = require('../libs/postgress.pool');
+const sequelize = require('../libs/sequelize');
+
 
 
 class ProductsService{
@@ -9,10 +10,11 @@ class ProductsService{
   constructor(){
     this.products = [];
     this.generate();
-    this.pool = pool;
-    pool.on('error', (err) => {
-      console.log(err)
-    })
+    this.sequelize = sequelize;
+    // this.pool = pool;
+    // pool.on('error', (err) => {
+    //   console.log(err)
+    // })
   }
 
   getInstance(){
@@ -38,8 +40,8 @@ class ProductsService{
 
   async findAll(){
     const query = 'SELECT * FROM tasks';
-    const {rows} = await this.pool.query(query);
-    return rows
+    const [data, metadata] = await this.sequelize.query(query);
+    return data;
   }
 
   async findById(id){
