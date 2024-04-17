@@ -29,13 +29,13 @@ app.get('/api/nueva', (req, res) => {
   res.send('Soy un nuevo endpoint');
 });
 
+routerApi(app);
 
+app.use(logErrors);
 app.use(queryErrorHandler);
 app.use(isBoomHandler);
-app.use(logErrors);
 app.use(errorHandler);
 
-routerApi(app);
 
 
 // app.get('/categories/:categoryId/products/:productId', (req, res) =>{

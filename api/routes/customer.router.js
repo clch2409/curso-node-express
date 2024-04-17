@@ -8,9 +8,9 @@ const customerService = require('./../services/customer.service')
 
 customerRouter.get('', findAll);
 
-// customerRouter.post('',
-//   validatorHandler(createCustomerSchema, 'body'),
-//   createUser);
+customerRouter.post('',
+  validatorHandler(createCustomerSchema, 'body'),
+  createCustomer);
 
 // customerRouter.get('/:id',
 //   validatorHandler(getCustomerSchema, 'params'),
@@ -45,16 +45,16 @@ async function findAll(req, res, next){
   }
 }
 
-async function createUser(req, res, next){
+async function createCustomer(req, res, next){
   try{
     const body = req.body;
 
-    const newUser = await usersService.createUser(body, next);
-    const users = await usersService.findAll();
+    const newCustomer = await customerService.createCustomer(body, next);
+    const customers = await customerService.findAll();
 
     res.status(201).json({
-      newUser,
-      users
+      newCustomer,
+      customers
     })
   }
   catch(e){
@@ -113,4 +113,4 @@ async function createUser(req, res, next){
 // }
 
 
-module.exports = userRouter;
+module.exports = customerRouter;

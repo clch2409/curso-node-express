@@ -37,7 +37,9 @@ class UsersService{
   }
 
   async findAll(){
-    const response = models.User.findAll();
+    const response = models.User.findAll({
+      include: 'customer'
+    });
     return response
   }
 

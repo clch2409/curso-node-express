@@ -20,17 +20,16 @@ function isBoomHandler(err, req, res, next){
       message: output.payload
     });
   }
-  else {
-    next(err);
-  }
+  next(err);
 }
 
 function queryErrorHandler(err, req, res, next){
-  if (err instanceof ValidationError){
+  if (err.sql){
     res.status(409).json({
       statusCode: 409,
-      message: err.name,
-      errors: err.errors,
+      message: err.parent.sqlMessage,
+      name: err.name,
+      sql: err.sql,
     })
   }
   next(err)

@@ -5,7 +5,7 @@ const CUSTOMER_TABLE = 'customers';
 
 const customerSchema = {
 
-  idCustomer: {
+  id: {
     primaryKey: true,
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -16,6 +16,7 @@ const customerSchema = {
     allowNull: false,
   },
   lastName: {
+    field: 'last_name',
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -23,8 +24,8 @@ const customerSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  idUser: {
-    field: 'id_user',
+  userId: {
+    field: 'user_id',
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
@@ -32,15 +33,15 @@ const customerSchema = {
       model: USER_TABLE,
       key: 'id'
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onUpdate: 'cascade',
+    onDelete: 'cascade'
   }
 
 }
 
 class Customer extends Model{
 
-  static asocciations(models){
+  static associate(models){
     this.belongsTo(models.User, { as: 'user' })
   }
 
