@@ -19,6 +19,17 @@ const userSchema = {
     type: DataTypes.STRING,
     unique: true
   },
+  role: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    defaultValue: 'customer'
+  },
+  isActive: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN,
+    field: 'is_active',
+    defaultValue: true
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
@@ -29,8 +40,8 @@ const userSchema = {
 
 class User extends Model{
 
-  static associate(){
-    //pass
+  static associate(models){
+    this.hasOne(models.Customer, { as: 'customer', foreignKey: 'idUser' })
   }
 
   static config(sequelize){

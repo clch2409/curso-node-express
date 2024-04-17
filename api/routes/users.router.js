@@ -1,7 +1,7 @@
 const express = require('express');
 
 const userRouter = express.Router();
-const boom = require('@hapi/boom')
+// const boom = require('@hapi/boom')
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createUserSchema, updateUserSchema, getUserSchema } = require('./../schema/user.schema')
 const usersService = require('./../services/users.service')
@@ -17,6 +17,7 @@ userRouter.get('/:id',
   getUserById);
 
 userRouter.put('/:id',
+  validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
   updateUser);
 
@@ -57,7 +58,7 @@ async function createUser(req, res, next){
     })
   }
   catch(e){
-    next()
+    next(e)
   }
 }
 
