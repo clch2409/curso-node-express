@@ -4,9 +4,11 @@ const productsRouter = express.Router();
 const ProductsService = require('../services/products.service');
 const boom = require('@hapi/boom');
 const validatorHandler = require('../middlewares/validator.handler')
-const { createProductSchema, updateProductSchema, getProductSchema } = require('../schema/product.schema')
+const { createProductSchema, updateProductSchema, getProductSchema, querySchema } = require('../schema/product.schema')
 
-productsRouter.get('', findAll);
+productsRouter.get('',
+  validatorHandler(querySchema, 'query'),
+  findAll);
 
 productsRouter.post('',
   validatorHandler(createProductSchema, 'body'),
@@ -29,7 +31,8 @@ productsRouter.delete('/:id',
   deleteProduct)
 
 async function findAll (req, res) {
-  const products = await ProductsService.findAll();
+
+  const products = await ProductsService.findAll(req.query);
   res.json(products);
 }
 

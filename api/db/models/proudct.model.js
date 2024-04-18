@@ -42,7 +42,7 @@ const productSchema={
         key:'id'
       },
       onUpdate:'CASCADE',
-      }
+    }
   }
 class Product extends Model{
 

@@ -44,7 +44,7 @@ const productOrderSchema =  {
   }
 }
 
-class OrderProduct extends Model {
+class ProductOrder extends Model {
 
   static associate(models) {
     //
@@ -60,4 +60,4 @@ class OrderProduct extends Model {
   }
 }
 
-module.exports = { OrderProduct, productOrderSchema, PRODUCT_ORDER_TABLE };
+module.exports = { ProductOrder, productOrderSchema, PRODUCT_ORDER_TABLE };
