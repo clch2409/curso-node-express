@@ -57,9 +57,9 @@ async function findById(req, res, next){
     if (!foundCategory){
       throw new boom.badRequest('El id de la categoría no existe');
     }
-    else if(!foundCategory.isActive){
-      throw new boom.unauthorized('La categoría está desactivada')
-    }
+    // else if(!foundCategory.isActive){
+    //   throw new boom.unauthorized('La categoría está desactivada')
+    // }
 
     res.status(302).json({
       foundCategory: foundCategory

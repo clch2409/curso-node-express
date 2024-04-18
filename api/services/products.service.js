@@ -1,5 +1,5 @@
 const faker = require('@faker-js/faker');
-const sequelize = require('../libs/sequelize');
+const {models} = require('../libs/sequelize');
 
 
 
@@ -10,7 +10,6 @@ class ProductsService{
   constructor(){
     this.products = [];
     this.generate();
-    this.sequelize = sequelize;
     // this.pool = pool;
     // pool.on('error', (err) => {
     //   console.log(err)
@@ -39,22 +38,22 @@ class ProductsService{
   }
 
   async findAll(){
-    const query = 'SELECT * FROM tasks';
-    const [data, metadata] = await this.sequelize.query(query);
-    return data;
+    const products = models.Product.findAll({
+      include: 'category'
+    });
+    return products;
   }
 
   async findById(id){
     return this.products.find(producto => producto.id == id);
   }
 
-  async createProduct(product){
-    const newProduct = {
-      id: faker.faker.string.uuid(),
-      ...product,
-      isVisible: true
+  async createProduct(body){
+    const newProductBody = {
+      ...body,
+      isVisible: true,
     }
-    this.products.push(newProduct)
+    const newProduct = models.Product.create(newProductBody);
     return newProduct
   }
 

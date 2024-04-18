@@ -33,17 +33,22 @@ async function findAll (req, res) {
   res.json(products);
 }
 
-async function createProduct(req, res){
-  const body = req.body;
-  await ProductsService.createProduct(body)
+async function createProduct(req, res, next){
+  try{
+    const body = req.body;
+    await ProductsService.createProduct(body)
 
-  const products = await ProductsService.findAll();
+    const products = await ProductsService.findAll();
 
-  res.status(201).json({
-    message: 'created',
-    data: body,
-    products: products
-  });
+    res.status(201).json({
+      message: 'created',
+      data: body,
+      products: products
+    });
+  }
+  catch(e){
+    next(e)
+  }
 }
 
 async function findById(req, res, next){

@@ -32,6 +32,13 @@ function queryErrorHandler(err, req, res, next){
       sql: err.sql,
     })
   }
+  else if(err instanceof ValidationError){
+    res.status(409).json({
+      statusCode: 409,
+      message: err.message,
+      instance: err.instance,
+    })
+  }
   next(err)
 }
 

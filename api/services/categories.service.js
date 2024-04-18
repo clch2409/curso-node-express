@@ -1,5 +1,7 @@
 const faker = require('@faker-js/faker');
 
+const {models} = require('../libs/sequelize');
+
 class CategoryService{
 
   constructor(){
@@ -23,24 +25,25 @@ class CategoryService{
 
   }
 
-  findAll(){
-    return this.categories;
+  async findAll(){
+    const categories = await models.Category.findAll();
+    return categories;
   }
 
-  createCategory(body){
-    const id = faker.faker.string.uuid();
-    const newCategory = {
-      id,
+  async createCategory(body){
+    const newCategoryBody = {
       ...body,
       isActive: true
     }
-    this.categories.push(newCategory);
+    const newCategory = await models.Category.create(newCategoryBody);
 
     return newCategory;
   }
 
-  findCategoryById(id){
-    const foundCategory = this.categories.find(category => category.id == id);
+  async findCategoryById(id){
+    const foundCategory = models.Category.findByPk(id, {
+      include: ['products']
+    });
 
     return foundCategory;
 
