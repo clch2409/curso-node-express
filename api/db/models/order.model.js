@@ -3,7 +3,7 @@ const { CUSTOMER_TABLE } = require('./customers.model');
 
 const ORDER_TABLE = 'orders';
 
-const OrderSchema = {
+const orderSchema = {
 	id: {
 		allowNull: false,
 		autoIncrement: true,
@@ -46,4 +46,4 @@ class Order extends Model {
 	}
 }
 
-module.exports = { Order, OrderSchema, ORDER_TABLE };
+module.exports = { Order, orderSchema, ORDER_TABLE };
