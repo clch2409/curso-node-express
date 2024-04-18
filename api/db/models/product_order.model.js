@@ -1,7 +1,7 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const { ORDER_TABLE } = require('./order.model');
-const { PRODUCT_TABLE } = require('./product.model');
+const { PRODUCT_TABLE } = require('./proudct.model');
 
 const PRODUCT_ORDER_TABLE = 'orders_products';
 
@@ -31,7 +31,6 @@ const productOrderSchema =  {
       key: 'id'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
   },
   productId: {
     field: 'product_id',
@@ -42,7 +41,6 @@ const productOrderSchema =  {
       key: 'id'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
   }
 }
 
