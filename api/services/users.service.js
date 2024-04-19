@@ -48,7 +48,7 @@ class UsersService{
   }
 
   async getUserById(id){
-    const foundUser = await models.User.findByPk(id);
+    const foundUser = await models.User.scope('withPassword').findByPk(id);
 
     if(!foundUser){
       throw new boom.notFound('El usuario no existe');
@@ -59,6 +59,8 @@ class UsersService{
 
   async createUser(body){
     const newUser = await models.User.create(body)
+
+    delete newUser.dataValues.password
 
     return newUser;
   }

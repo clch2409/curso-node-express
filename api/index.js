@@ -1,6 +1,7 @@
 const express = require('express');
 const routerApi = require('./routes');
-const { logErrors, errorHandler, isBoomHandler, queryErrorHandler } = require('./middlewares/error.handler');
+const { logErrors, errorHandler, isBoomHandler, queryErrorHandler, } = require('./middlewares/error.handler');
+const checkApiKey = require('./middlewares/auth.handler');
 const cors = require('cors')
 
 const app = express();
@@ -25,7 +26,7 @@ app.get('/api', (req, res) => {
   res.send('Hola, mi server en express');
 });
 
-app.get('/api/nueva', (req, res) => {
+app.get('/api/nueva', checkApiKey, (req, res) => {
   res.send('Soy un nuevo endpoint');
 });
 

@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const bcrypt = require('bcrypt')
 
 const USER_TABLE = 'users';
 
@@ -49,7 +50,23 @@ class User extends Model{
       sequelize,
       tableName: USER_TABLE,
       modelName: 'User',
-      timestamps: false
+      timestamps: false,
+      hooks: {
+        beforeCreate: async (instance) => {
+          const hash = await bcrypt.hash(instance.password, 10);
+          instance.password = hash;
+        }
+      },
+      defaultScope: {
+        attributes: {
+          exclude: ['password']
+        }
+      },
+      scopes: {
+        withPassword: {
+          attributes: ['id', 'email', 'password', 'role', 'isActive', 'createdAt'],
+        }
+      },
     }
   }
 
