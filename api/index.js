@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport')
 const routerApi = require('./routes');
 const { logErrors, errorHandler, isBoomHandler, queryErrorHandler, } = require('./middlewares/error.handler');
 const checkApiKey = require('./middlewares/auth.handler');
@@ -21,6 +22,11 @@ const options = {
 
 app.use(cors(options))
 app.use(express.json())
+require('./utils/auth')
+app.use(passport.initialize({
+  session: false
+}))
+
 
 app.get('/api', (req, res) => {
   res.send('Hola, mi server en express');
