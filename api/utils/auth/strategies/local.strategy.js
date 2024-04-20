@@ -15,11 +15,13 @@ const LocalStrategy = new Strategy({
         done(boom.unauthorized('El usuario no existe'), false);
       }
 
-      const passwordMatches = bcrypt.compare(password, foundUser.password);
+      const passwordMatches = await bcrypt.compare(password, foundUser.dataValues.password);
 
       if (!passwordMatches){
         done(boom.unauthorized('La contraseña no coincide'), false);
       }
+
+      delete foundUser.dataValues.password
 
       done(null, foundUser);
     }

@@ -58,7 +58,7 @@ class UsersService{
   }
 
   async getUserByEmail(email){
-    const foundUser = await models.User.findOne({
+    const foundUser = await models.User.scope('withPassword').findOne({
       where: {
         email
       }

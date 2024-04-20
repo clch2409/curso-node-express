@@ -16,4 +16,4 @@ async function loginUser(req, res, next){
   }
 }
 
-module.exports = categoriesRouter;
+module.exports = authRouter;
