@@ -20,6 +20,12 @@ const userSchema = {
     type: DataTypes.STRING,
     unique: true
   },
+  recoveryToken: {
+    field: 'recovery_token',
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: true
+  },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
@@ -64,7 +70,7 @@ class User extends Model{
       },
       scopes: {
         withPassword: {
-          attributes: ['id', 'email', 'password', 'role', 'isActive', 'createdAt'],
+          attributes: ['id', 'email', 'password', 'role', 'isActive', 'createdAt', 'recoveryToken'],
         }
       },
     }

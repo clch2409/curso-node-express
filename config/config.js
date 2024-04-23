@@ -10,6 +10,9 @@ const config = {
   dbPort: process.env.DB_PORT,
   apiKey: process.env.API_KEY,
   jswtSecret: process.env.JWT_SECRET,
+  senderEmail: process.env.SENDER_EMAIL,
+  senderPassword: process.env.SENDER_PASSWORD,
+  jswtSecretRecovery: process.env.JWT_SECRET_RECOVERY,
 }
 
 module.exports = config

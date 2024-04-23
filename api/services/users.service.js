@@ -92,6 +92,10 @@ class UsersService{
 
     const foundUser = await this.getUserById(id);
 
+    if (!foundUser){
+      throw boom.notFound();
+    }
+
     const updatedUser = await foundUser.update(body)
 
     return updatedUser;
