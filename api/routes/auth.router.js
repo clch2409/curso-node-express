@@ -1,6 +1,9 @@
 const express = require('express');
-const authRouter = express.Router();
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+
+const authRouter = express.Router();
+const config = require('./../../config/config');
 
 
 authRouter.post('/login',
@@ -10,7 +13,23 @@ authRouter.post('/login',
 
 async function loginUser(req, res, next){
   try {
-    res.json(req.user)
+    const user = req.user;
+
+    const jwtConfig = {
+      expiresIn: 120
+    }
+
+    const payload = {
+      sub: user.id,
+      role: user.role,
+    }
+    const token = jwt.sign(payload, config.jswtSecret, jwtConfig);
+
+    res.json({
+      user,
+      token
+    })
+
   } catch (error) {
     next(error)
   }

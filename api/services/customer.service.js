@@ -10,6 +10,17 @@ class CustomerService {
     return customers;
   }
 
+  async findCustomerByUser(userId){
+    const customer = await models.Customer.findOne({
+      where: {
+        '$user.id$': userId
+      },
+      include: ['user']
+    })
+
+    return customer
+  }
+
   async createCustomer(body, next){
 
     try{

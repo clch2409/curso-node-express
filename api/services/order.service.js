@@ -1,14 +1,25 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const customerService = require('./customer.service');
 
 class OrderService {
 	constructor() {
 	}
 
-	async create(data) {
-		const newOrder = await models.Order.create(data);
-		return newOrder;
+	async create(userId) {
+		const customer = await customerService.findCustomerByUser(userId);
+
+    if (!customer){
+      throw boom.unauthorized();
+    }
+
+    const order = await models.Order.create({
+      customerId: customer.dataValues.id
+    });
+
+    return order;
+
 	}
 
   async addItem(data) {
@@ -36,6 +47,22 @@ class OrderService {
 		});
 		return order;
 	}
+
+  async findOrdersByUser(userId){
+    const orders = await models.Order.findAll({
+      where: {
+        '$customer.user.id$': userId
+      },
+      include: [
+        {
+          association: 'customer',
+          include: ['user']
+        }
+      ],
+    });
+
+    return orders;
+  }
 
 	async update(id, changes) {
 		return {

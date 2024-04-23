@@ -7,12 +7,14 @@ const {
 	createOrderSchema,
   addItemSchema
 } = require('../schema/order.schema');
+const passport = require('passport');
+const { checkRoles } = require('../middlewares/auth.handler');
 
 const router = express.Router();
 const service = new OrderService();
 
 router.get(
-	'/:id',
+	'/order/:id',
 	validatorHandler(getOrderSchema, 'params'),
 	async (req, res, next) => {
 		try {
@@ -27,11 +29,14 @@ router.get(
 
 router.post(
 	'/',
-	validatorHandler(createOrderSchema, 'body'),
+  passport.authenticate('jwt', {session:false}),
+  // checkRoles('admin', 'seller', 'customer'),
+	// validatorHandler(createOrderSchema, 'body'),
 	async (req, res, next) => {
 		try {
-			const body = req.body;
-			const newOrder = await service.create(body);
+      console.log(req.user)
+			const userId = req.user.sub;
+      const newOrder = await service.create(userId)
 			res.status(201).json({ newOrder });
 		} catch (error) {
 			next(error);
@@ -51,6 +56,21 @@ router.post(
 			next(error);
 		}
 	}
+);
+
+router.get('/user',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'seller', 'customer'),
+  async (req, res, next) =>{
+    try{
+      const ordersByUser = await service.findOrdersByUser(req.user.sub);
+
+      res.json(ordersByUser)
+    }
+    catch(e){
+      next(e)
+    }
+  }
 );
 
 module.exports = router;

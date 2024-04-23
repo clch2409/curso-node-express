@@ -1,10 +1,12 @@
 const express = require('express');
+const passport = require('passport');
 
 const customerRouter = express.Router();
 // const boom = require('@hapi/boom')
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createCustomerSchema, updateCustomerSchema, getCustomerSchema } = require('./../schema/customer.schema')
-const customerService = require('./../services/customer.service')
+const { createCustomerSchema, updateCustomerSchema, getCustomerSchema } = require('./../schema/customer.schema');
+const { checkRoles } = require('./../middlewares/auth.handler');
+const customerService = require('./../services/customer.service');
 
 customerRouter.get('', findAll);
 
@@ -56,6 +58,15 @@ async function createCustomer(req, res, next){
       newCustomer,
       customers
     })
+  }
+  catch(e){
+    next(e)
+  }
+}
+
+async function findAllByUser(req, res, next){
+  try{
+
   }
   catch(e){
     next(e)

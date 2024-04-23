@@ -3,15 +3,21 @@ const boom = require('@hapi/boom')
 const categoriesRouter = express.Router();
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createCategorySchema, getCategorySchema, updateCategorySchema } = require('./../schema/category.schema');
+const { checkRoles } = require('./../middlewares/auth.handler')
 const categoriesService = require('./../services/categories.service');
+const passport = require('passport');
 
 categoriesRouter.get('', findAll);
 
 categoriesRouter.post('',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'seller'),
   validatorHandler(createCategorySchema, 'body'),
   createCategory);
 
 categoriesRouter.get('/:id',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'seller'),
   validatorHandler(getCategorySchema, 'params'),
   findById);
 

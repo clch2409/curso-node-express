@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport')
 const routerApi = require('./routes');
 const { logErrors, errorHandler, isBoomHandler, queryErrorHandler, } = require('./middlewares/error.handler');
-const checkApiKey = require('./middlewares/auth.handler');
+const {checkApiKey} = require('./middlewares/auth.handler');
 const cors = require('cors')
 
 const app = express();
